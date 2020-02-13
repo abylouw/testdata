@@ -1,0 +1,498 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Qfrency Text-to-Speech SaaS Reseller API",
+    "description": "The Qfrency Text-to-Speech SaaS Reseller service provides an API to handle user accounts between the resellers and the Qfrency Text-to-Speech SaaS database.",
+    "contact": {
+      "name": "Qfrency TTS SaaS Support",
+      "email": "jalouw@csir.co.za"
+    },
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://dev.saas.qfrency.com/v1",
+      "description": "Development server"
+    },
+    {
+      "url": "https://saas.qfrency.com/v1",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "List of users",
+        "description": "Get and return a list of all the unique user identifiers (UUIDs) associated with the reseller.",
+        "operationId": "listUUID",
+        "responses": {
+          "200": {
+            "description": "A list of all the unique user identifiers (UUIDs) associated with the reseller.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "examples": {
+                  "users": {
+                    "summary": "Get users example",
+                    "description": "Example of the returned value when the list of UUIDs associated with the reseller is requested.",
+                    "value": [
+                      "43138f0f-62ec-46c5-80bb-00177ff1bcbd",
+                      "e380d779-0825-4cc5-aa5f-1464dee85489"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Add a new user",
+        "description": "Create a new user and return the user's id (UUID).",
+        "operationId": "addUUID",
+        "responses": {
+          "201": {
+            "description": "A string UUID for the newly created user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "users": {
+                    "summary": "Create user example",
+                    "description": "Example of the returned value when a new UUID is created for a user.",
+                    "value": "1622e2b6-f442-43cf-8b7c-73813ccee7b0"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/users/{UUID}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "List user details",
+        "description": "Get and return a list of all the API keys and their number of associated tokens.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UUID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "String UUID of the user."
+          }
+        ],
+        "operationId": "listUser",
+        "responses": {
+          "200": {
+            "description": "A dictionary of API keys and their associated token count for the given user (UUID).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer"
+                  }
+                },
+                "examples": {
+                  "apikeys": {
+                    "summary": "User API keys information",
+                    "description": "Example of the returned value when the user detail with the given UUID is requested.",
+                    "value": {
+                      "d076ab0c-c9e9-4494-b63e-4dfc47e17874": 2001,
+                      "378c1982-60ec-44d6-9317-6e201101980d": 10,
+                      "bf31ef4c-7535-42bf-a9fd-ad9608a44a54": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Add a new API key",
+        "description": "Create a new API key for the given user ID (UUID).",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UUID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "String UUID of the user."
+          }
+        ],
+        "operationId": "addAPIKey",
+        "responses": {
+          "201": {
+            "description": "A string API key for the given user ID (UUID).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "users": {
+                    "summary": "Create API key example",
+                    "description": "Example of the returned value when a new API key is created for a user.",
+                    "value": "68aa6624-40e5-40ad-8d16-1d7b69a1fffe"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete a user",
+        "description": "Delete a user with the given user ID (UUID).",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UUID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "String UUID of the user."
+          }
+        ],
+        "operationId": "deleteUser",
+        "responses": {
+          "201": {
+            "description": "A dictionary of the API keys and their associated token count for the deleted user (UUID).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer"
+                  }
+                },
+                "examples": {
+                  "apikeys": {
+                    "summary": "User API keys information",
+                    "description": "Example of the returned value when the user detail with the given UUID is deleted.",
+                    "value": {
+                      "378c1982-60ec-44d6-9317-6e201101980d": 10,
+                      "bf31ef4c-7535-42bf-a9fd-ad9608a44a54": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/users/{UUID}/{API_KEY}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get API key details",
+        "description": "Get and return the number of tokens available for the given API key of the given user.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UUID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "String UUID of the user."
+          },
+          {
+            "in": "path",
+            "name": "API_KEY",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "String API key of the given user."
+          }
+        ],
+        "operationId": "listUserAPIKey",
+        "responses": {
+          "200": {
+            "description": "A token count for the given API Key and user combination.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer"
+                },
+                "examples": {
+                  "tokens": {
+                    "summary": "Number of tokens",
+                    "description": "Example of the returned value when the API key with the given UUID is requested.",
+                    "value": 2001
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Add/Remove tokens to/from API key",
+        "description": "Add or remove tokens to/from the given API key and user combination.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UUID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "String UUID of the user."
+          },
+          {
+            "in": "path",
+            "name": "API_KEY",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "String API key of the given user."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Number of tokens to add (positive number) or remove (negative number) to/from user and API key combination.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "integer"
+              },
+              "examples": {
+                "tokens": {
+                  "value": 1000
+                }
+              }
+            }
+          }
+        },
+        "operationId": "addRemoveUserAPIKeyTokens",
+        "responses": {
+          "201": {
+            "description": "The new number of tokens available for the given user and API key combination.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer"
+                },
+                "examples": {
+                  "tokens": {
+                    "summary": "Number of tokens",
+                    "description": "Example of the returned value when a tokens are added or removed to/from an API key.",
+                    "value": 3021
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete an API key",
+        "description": "Delete an API key for the given user ID (UUID).",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UUID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "String UUID of the user."
+          },
+          {
+            "in": "path",
+            "name": "API_KEY",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "String API key of the given user."
+          }
+        ],
+        "operationId": "deleteAPIKey",
+        "responses": {
+          "201": {
+            "description": "A dictionary of the **remaining** API keys and their associated token count for the given user (UUID).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer"
+                  }
+                },
+                "examples": {
+                  "apikeys": {
+                    "summary": "User API keys information",
+                    "description": "Example of the returned value when the user detail with the given UUID is requested.",
+                    "value": {
+                      "378c1982-60ec-44d6-9317-6e201101980d": 10,
+                      "bf31ef4c-7535-42bf-a9fd-ad9608a44a54": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "APIKeyAuth": {
+        "type": "apiKey",
+        "name": "X-API-KEY",
+        "in": "header"
+      }
+    },
+    "responses": {
+      "Forbidden": {
+        "description": "You do not have permission to access this resource."
+      },
+      "NotFound": {
+        "description": "The requested resource was not found."
+      },
+      "InternalServerError": {
+        "description": "The service experienced an internal error."
+      },
+      "ServiceUnavailable": {
+        "description": "The service is currently unavailable."
+      }
+    }
+  }
+}
