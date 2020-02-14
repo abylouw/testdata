@@ -19,6 +19,11 @@
       "description": "Production server"
     }
   ],
+  "security": [
+    {
+      "APIKeyAuth": []
+    }
+  ],
   "paths": {
     "/users": {
       "get": {
@@ -27,7 +32,7 @@
         ],
         "summary": "List of users",
         "description": "Get and return a list of all the unique user identifiers (UUIDs) associated with the reseller.",
-        "operationId": "listUUID",
+        "operationId": "list_users",
         "responses": {
           "200": {
             "description": "A list of all the unique user identifiers (UUIDs) associated with the reseller.",
@@ -37,7 +42,8 @@
                   "type": "array",
                   "items": {
                     "type": "string"
-                  }
+                  },
+                  "x-content-type": "application/json"
                 },
                 "examples": {
                   "users": {
@@ -53,15 +59,16 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "Invalid reseller key."
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "The service experienced an internal error."
           },
           "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
+            "description": "The service is currently unavailable."
           }
-        }
+        },
+        "x-openapi-router-controller": "swagger_server.controllers.users_controller"
       },
       "post": {
         "tags": [
@@ -69,14 +76,25 @@
         ],
         "summary": "Add a new user",
         "description": "Create a new user and return the user's id (UUID).",
-        "operationId": "addUUID",
+        "operationId": "add_user",
         "responses": {
           "201": {
             "description": "A string UUID for the newly created user.",
+            "headers": {
+              "Location": {
+                "description": "Absolute URL of newly created user.",
+                "style": "simple",
+                "explode": false,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "x-content-type": "application/json"
                 },
                 "examples": {
                   "users": {
@@ -89,15 +107,16 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "Invalid reseller key."
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "The service experienced an internal error."
           },
           "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
+            "description": "The service is currently unavailable."
           }
-        }
+        },
+        "x-openapi-router-controller": "swagger_server.controllers.users_controller"
       }
     },
     "/users/{UUID}": {
@@ -107,18 +126,20 @@
         ],
         "summary": "List user details",
         "description": "Get and return a list of all the API keys and their number of associated tokens.",
+        "operationId": "list_user_api_keys",
         "parameters": [
           {
-            "in": "path",
             "name": "UUID",
+            "in": "path",
+            "description": "String UUID of the user.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
               "type": "string"
-            },
-            "required": true,
-            "description": "String UUID of the user."
+            }
           }
         ],
-        "operationId": "listUser",
         "responses": {
           "200": {
             "description": "A dictionary of API keys and their associated token count for the given user (UUID).",
@@ -128,7 +149,8 @@
                   "type": "object",
                   "additionalProperties": {
                     "type": "integer"
-                  }
+                  },
+                  "x-content-type": "application/json"
                 },
                 "examples": {
                   "apikeys": {
@@ -145,18 +167,19 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "Invalid reseller key."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "description": "The requested user id was not found."
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "The service experienced an internal error."
           },
           "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
+            "description": "The service is currently unavailable."
           }
-        }
+        },
+        "x-openapi-router-controller": "swagger_server.controllers.users_controller"
       },
       "post": {
         "tags": [
@@ -164,25 +187,38 @@
         ],
         "summary": "Add a new API key",
         "description": "Create a new API key for the given user ID (UUID).",
+        "operationId": "add_user_api_key",
         "parameters": [
           {
-            "in": "path",
             "name": "UUID",
+            "in": "path",
+            "description": "String UUID of the user.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
               "type": "string"
-            },
-            "required": true,
-            "description": "String UUID of the user."
+            }
           }
         ],
-        "operationId": "addAPIKey",
         "responses": {
           "201": {
             "description": "A string API key for the given user ID (UUID).",
+            "headers": {
+              "Location": {
+                "description": "Absolute URL of newly created API of given user.",
+                "style": "simple",
+                "explode": false,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "type": "string",
+                  "x-content-type": "application/json"
                 },
                 "examples": {
                   "users": {
@@ -195,18 +231,19 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "Invalid reseller key."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "description": "The requested user id was not found."
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "The service experienced an internal error."
           },
           "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
+            "description": "The service is currently unavailable."
           }
-        }
+        },
+        "x-openapi-router-controller": "swagger_server.controllers.users_controller"
       },
       "delete": {
         "tags": [
@@ -214,20 +251,22 @@
         ],
         "summary": "Delete a user",
         "description": "Delete a user with the given user ID (UUID).",
+        "operationId": "delete_user",
         "parameters": [
           {
-            "in": "path",
             "name": "UUID",
+            "in": "path",
+            "description": "String UUID of the user.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
               "type": "string"
-            },
-            "required": true,
-            "description": "String UUID of the user."
+            }
           }
         ],
-        "operationId": "deleteUser",
         "responses": {
-          "201": {
+          "200": {
             "description": "A dictionary of the API keys and their associated token count for the deleted user (UUID).",
             "content": {
               "application/json": {
@@ -235,7 +274,8 @@
                   "type": "object",
                   "additionalProperties": {
                     "type": "integer"
-                  }
+                  },
+                  "x-content-type": "application/json"
                 },
                 "examples": {
                   "apikeys": {
@@ -251,18 +291,19 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "Invalid reseller key."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "description": "The requested user id was not found."
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "The service experienced an internal error."
           },
           "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
+            "description": "The service is currently unavailable."
           }
-        }
+        },
+        "x-openapi-router-controller": "swagger_server.controllers.users_controller"
       }
     },
     "/users/{UUID}/{API_KEY}": {
@@ -272,34 +313,39 @@
         ],
         "summary": "Get API key details",
         "description": "Get and return the number of tokens available for the given API key of the given user.",
+        "operationId": "list_user_api_key_tokens",
         "parameters": [
           {
-            "in": "path",
             "name": "UUID",
+            "in": "path",
+            "description": "String UUID of the user.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
               "type": "string"
-            },
-            "required": true,
-            "description": "String UUID of the user."
+            }
           },
           {
-            "in": "path",
             "name": "API_KEY",
+            "in": "path",
+            "description": "String API key of the given user.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
               "type": "string"
-            },
-            "required": true,
-            "description": "String API key of the given user."
+            }
           }
         ],
-        "operationId": "listUserAPIKey",
         "responses": {
           "200": {
             "description": "A token count for the given API Key and user combination.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "integer"
+                  "type": "integer",
+                  "x-content-type": "application/json"
                 },
                 "examples": {
                   "tokens": {
@@ -312,93 +358,19 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "Invalid reseller key."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "description": "The requested user id and api key combination was not found."
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "The service experienced an internal error."
           },
           "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Add/Remove tokens to/from API key",
-        "description": "Add or remove tokens to/from the given API key and user combination.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "UUID",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "String UUID of the user."
-          },
-          {
-            "in": "path",
-            "name": "API_KEY",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "String API key of the given user."
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "description": "Number of tokens to add (positive number) or remove (negative number) to/from user and API key combination.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "integer"
-              },
-              "examples": {
-                "tokens": {
-                  "value": 1000
-                }
-              }
-            }
+            "description": "The service is currently unavailable."
           }
         },
-        "operationId": "addRemoveUserAPIKeyTokens",
-        "responses": {
-          "201": {
-            "description": "The new number of tokens available for the given user and API key combination.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer"
-                },
-                "examples": {
-                  "tokens": {
-                    "summary": "Number of tokens",
-                    "description": "Example of the returned value when a tokens are added or removed to/from an API key.",
-                    "value": 3021
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          },
-          "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
-          }
-        }
+        "x-openapi-router-controller": "swagger_server.controllers.users_controller"
       },
       "delete": {
         "tags": [
@@ -406,27 +378,31 @@
         ],
         "summary": "Delete an API key",
         "description": "Delete an API key for the given user ID (UUID).",
+        "operationId": "delete_api_key",
         "parameters": [
           {
-            "in": "path",
             "name": "UUID",
+            "in": "path",
+            "description": "String UUID of the user.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
               "type": "string"
-            },
-            "required": true,
-            "description": "String UUID of the user."
+            }
           },
           {
-            "in": "path",
             "name": "API_KEY",
+            "in": "path",
+            "description": "String API key of the given user.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
             "schema": {
               "type": "string"
-            },
-            "required": true,
-            "description": "String API key of the given user."
+            }
           }
         ],
-        "operationId": "deleteAPIKey",
         "responses": {
           "201": {
             "description": "A dictionary of the **remaining** API keys and their associated token count for the given user (UUID).",
@@ -436,7 +412,8 @@
                   "type": "object",
                   "additionalProperties": {
                     "type": "integer"
-                  }
+                  },
+                  "x-content-type": "application/json"
                 },
                 "examples": {
                   "apikeys": {
@@ -452,35 +429,153 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "You do not have permission to access this resource."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "description": "The requested resource was not found."
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "The service experienced an internal error."
           },
           "503": {
-            "$ref": "#/components/responses/ServiceUnavailable"
+            "description": "The service is currently unavailable."
           }
-        }
+        },
+        "x-openapi-router-controller": "swagger_server.controllers.users_controller"
+      },
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Modify the tokens",
+        "description": "Add or remove tokens to/from the given API key and user combination.",
+        "operationId": "modify_user_api_key_tokens",
+        "parameters": [
+          {
+            "name": "UUID",
+            "in": "path",
+            "description": "String UUID of the user.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "API_KEY",
+            "in": "path",
+            "description": "String API key of the given user.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Description of the patch to be made to the token count of the given API key and user combination.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchDocument"
+              },
+              "examples": {
+                "replace": {
+                  "description": "Replace the current value of the token count with the given value.",
+                  "value": {
+                    "op": "replace",
+                    "path": "/tokenCount",
+                    "value": 10
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The new number of tokens available for the given user and API key combination.",
+            "headers": {
+              "Location": {
+                "description": "Absolute URL of newly created API of given user.",
+                "style": "simple",
+                "explode": false,
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "x-content-type": "application/json"
+                },
+                "examples": {
+                  "tokens": {
+                    "summary": "Number of tokens",
+                    "description": "Example of the returned value when a tokens are added or removed to/from an API key.",
+                    "value": 3021
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request cannot be fulfilled due to bad syntax."
+          },
+          "403": {
+            "description": "You do not have permission to access this resource."
+          },
+          "404": {
+            "description": "The requested resource was not found."
+          },
+          "500": {
+            "description": "The service experienced an internal error."
+          },
+          "503": {
+            "description": "The service is currently unavailable."
+          }
+        },
+        "x-openapi-router-controller": "swagger_server.controllers.users_controller"
       }
     }
   },
-  "security": [
-    {
-      "ApiKeyAuth": []
-    }
-  ],
   "components": {
-    "securitySchemes": {
-      "APIKeyAuth": {
-        "type": "apiKey",
-        "name": "X-API-KEY",
-        "in": "header"
+    "schemas": {
+      "PatchDocument": {
+        "required": [
+          "op",
+          "path"
+        ],
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "description": "The operation to be performed",
+            "enum": [
+              "replace"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "description": "A JSON-Pointer"
+          },
+          "value": {
+            "type": "integer",
+            "description": "The value to be used within the operations."
+          }
+        },
+        "description": "A JSONPatch document as defined by RFC 6902"
       }
     },
     "responses": {
+      "BadRequest": {
+        "description": "The request cannot be fulfilled due to bad syntax."
+      },
       "Forbidden": {
         "description": "You do not have permission to access this resource."
       },
@@ -492,6 +587,14 @@
       },
       "ServiceUnavailable": {
         "description": "The service is currently unavailable."
+      }
+    },
+    "securitySchemes": {
+      "APIKeyAuth": {
+        "type": "apiKey",
+        "name": "X-API-KEY",
+        "in": "header",
+        "x-apikeyInfoFunc": "swagger_server.controllers.authorization_controller.check_APIKeyAuth"
       }
     }
   }
