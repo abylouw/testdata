@@ -1,6 +1,6 @@
-![QfrencyTTS:Speech by Qfrency](https://img.shields.io/badge/QfrencyTTS-Speech%20by%20Qfrency-brightgreen "QfrencyTTS: Speech by Qfrency")
-
 # Qfrency Text-to-Speech Cloud API
+
+![QfrencyTTS:Speech by Qfrency](https://img.shields.io/badge/QfrencyTTS-Speech%20by%20Qfrency-brightgreen "QfrencyTTS: Speech by Qfrency")
 
 Qfrency is a multilingual Text-to-Speech system which provides both cloud
 based Application Programming Interfaces (API), as well as a Software
