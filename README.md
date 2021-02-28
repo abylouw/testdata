@@ -1,7 +1,4 @@
-Added README
-
-
-![alt text](https://img.shields.io/badge/QfrencyTTS-Speech%20by%20Qfrency-brightgreen "Logo Title Text 1")
+![QfrencyTTS:Speech by Qfrency](https://img.shields.io/badge/QfrencyTTS-Speech%20by%20Qfrency-brightgreen "QfrencyTTS: Speech by Qfrency")
 
 # Qfrency Text-to-Speech Cloud API
 
@@ -10,9 +7,9 @@ based Application Programming Interfaces (API), as well as a Software
 Development Kit (SDK) for synthesizing text into speech in the South African
 languages.
 
-
-![QfrencyTTS:Speech by Qfrency](https://img.shields.io/badge/QfrencyTTS-Speech%20by%20Qfrency-brightgreen "QfrencyTTS: Speech by Qfrency")
-
+To find out more go to our website, [qfrency.com](https://www.qfrency.com), or
+our cloud based TTS service
+[tts.qfrency.com/docs](https://tts.qfrency.com/docs).
 
 ## OpenAPI
 
