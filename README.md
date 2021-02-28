@@ -19,6 +19,7 @@ client implementations in various programming languages using tools like the
 OpenAPI Generator (https://openapi-generator.tech/).
 
 ## License
+ [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 The Qfrency Text-to-Speech Cloud API specification is licensed under the
-Apache 2.0 License [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+Apache 2.0 License.
